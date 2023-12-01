@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-center mt-5">
+          <table class="table shadow border table-dark table-striped w-75">
+            <tr class="text-center">
+              <th style="width: 100px;">ID</th>
+              <th>Task Name</th>
+              <th>Status</th>
+              <th style="width: 100px;">Edit</th>
+              <th style="width: 100px;">Remove</th>
+            </tr>
+            {%for d in data%}
+            <tr class="text-center">
+              <td>{{d.id}}</td>
+              <td>{{d.name}}</td>
+              <td>{{d.status}}</td>
+              <td>
+                <button type="button" class="btn btn-outline-info "><i class="fa-regular fa-pen-to-square fa-lg"></i></button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can fa-lg"></i></button>
+              </td>
+            </tr>
+            {%endfor%}
+          </table>
+        </div>

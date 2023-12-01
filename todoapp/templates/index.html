@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+{%load static%}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      .card{
+        width: 30%;
+      }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+
+    <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{%url 'index'%}">
+                <img src="{%static 'images/ToDo.png'%}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                ToDo
+            </a>
+          <button class="navbar-toggler btn btn-2xl" style="height: 40px; width: 70px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <i class="fa-solid fa-circle-user fa-xl" style="color: #ffffff;"></i>
+          </button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="fa-solid fa-user"></i> {{request.user}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{%url 'index'%}">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{%url 'logout'%}">Logout <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                </li>
+              </ul>
+              <form class="d-flex mt-3" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+    <div class="container mt-5">
+
+        <form action="" method="post" class="d-flex justify-content-center">
+            {%csrf_token%}
+
+            {%for field in form%}
+              <div class="w-50 me-4">
+                {{field}}
+              </div>
+            {%endfor%}
+            <p>
+              <button type="submit" class="btn btn-outline-dark mb-3">Add Task</button>
+            </p>
+        </form>
+        <div class="container">
+          <div class="section d-flex justify-content-evenly">
+            <div class="card text-center p-3 shadow">
+              <h5 class="fw-bold ">Pending ToDos 
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                  {{pending}}
+                </span>
+              </h5>
+              {%for todo in data%}
+                {%if todo.status == 'todo'%}
+                  <div class="alert alert-secondary" role="alert">
+                    {{todo.name}}
+                    <a href="{%url 'todo-change' todo.id%}?status=inprogress"><button class="btn btn-outline-warning"><i class="fa-solid fa-hourglass-start"></i></button></a>
+                  </div>
+                {%endif%}
+              {%endfor%}
+            </div>
+            <div class="card text-center p-3 shadow">
+              <h5 class="fw-bold">In Progress ToDos
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                  {{progress}}
+                </span>
+              </h5>
+              {%for todo in data%}
+                {%if todo.status == 'inprogress'%}
+                  <div class="alert alert-secondary" role="alert">
+                    {{todo.name}}
+                    <a href="{%url 'todo-change' todo.id%}?status=completed"><button class="btn btn-outline-success"><i class="fa-solid fa-check"></i></button></a>
+                  </div>
+                {%endif%}
+              {%endfor%}
+            </div>
+            <div class="card text-center p-3 shadow">
+              <h5 class="fw-bold">Completed ToDos
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                  {{done}}
+                </span>
+              </h5>
+              {%for todo in data%}
+              {%if todo.status == 'completed'%}
+                <div class="alert alert-secondary" role="alert">
+                  {{todo.name}}
+                  <a href="{%url 'todo-delete' todo.id%}"><button class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button></a>
+                </div>
+              {%endif%}
+              {%endfor%}
+            </div>
+              
+          </div>
+
+        </div>
+        
+        
+    </div>
+    
+</body>
+</html>
